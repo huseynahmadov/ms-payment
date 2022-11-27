@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ExceptionResponse {
+public class ExceptionResponse extends RuntimeException {
 
     String code;
     String message;
