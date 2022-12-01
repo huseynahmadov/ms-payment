@@ -14,13 +14,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "ms-country", url = "${client.ms-country.endpoint}")
+@FeignClient(name = "ms-country", url = "${client.ms-country.endpoint}",
+        configuration = CountryClient.FeignConfiguration.class,
+        fallback = FallbackController.class)
 public interface CountryClient {
 
     @GetMapping("/api/countries")
     List<CountryDto> getAllAvailableCountries(@RequestParam String currency);
 
     class FeignConfiguration {
+
         private final CircuitBreakerRegistry registry;
 
         public FeignConfiguration(CircuitBreakerRegistry registry) {
@@ -38,4 +41,5 @@ public interface CountryClient {
             return Resilience4jFeign.builder(decorators);
         }
     }
+
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.lang.reflect.UndeclaredThrowableException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +31,13 @@ public class ErrorHandler {
     public ExceptionResponse handleNotFound(NotFoundException exception) {
         log.error("NotFoundException : ", exception);
         return new ExceptionResponse(exception.getCode(), exception.getMessage());
+    }
+
+    @ExceptionHandler(UndeclaredThrowableException.class) // InvocationTargetException
+    @ResponseStatus(SERVICE_UNAVAILABLE)
+    public ExceptionResponse handleServiceUnavailable(UndeclaredThrowableException exception) {
+        log.error("UndeclaredThrowableException", exception);
+        return new ExceptionResponse(SERVICE_UNAVAILABLE.name(), exception.getCause().getCause().getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 8083
 
 spring:
   datasource:
@@ -26,15 +26,14 @@ client:
   ms-country:
     endpoint: http://localhost:8081
 
-  resilience4j:
-    circuitbreaker:
-      instances:
-        countryService:
-          register-health-indicator: true
-          failure-rate-threshold: 50
-          minimum-number-of-calls: 5
-          wait-duration-in-open-state: 10s
-          automatic-transition-from-open-to-half-open-enabled: true
-          permitted-number-of-calls-in-half-open-state: 2
-          sliding-window-size: 4
-          sliding-window-type: COUNT_BASED
+resilience4j.circuit-breaker:
+    instances:
+      countryService:
+        register-health-indicator: true
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 5
+        wait-duration-in-open-state: 30s
+        automatic-transition-from-open-to-half-open-enabled: true
+        permitted-number-of-calls-in-half-open-state: 2
+        sliding-window-size: 4
+        sliding-window-type: COUNT_BASED
