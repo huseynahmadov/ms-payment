@@ -20,7 +20,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping
-    @ResponseStatus(CREATED)
+    @ResponseStatus(CREATED) // RESPONSE STATUS IS 201
     public void savePayment(@Valid @RequestBody PaymentRequest request) {
         paymentService.savePayment(request);
     }
@@ -30,7 +30,6 @@ public class PaymentController {
                                                   @RequestParam int count,
                                                   PaymentCriteria paymentCriteria) {
 
-        System.out.println(paymentService.getAllPayments(page,count,paymentCriteria));
         return paymentService.getAllPayments(page,count,paymentCriteria);
     }
 

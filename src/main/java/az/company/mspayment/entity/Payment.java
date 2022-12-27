@@ -26,4 +26,6 @@ public class Payment {
 
     @CreationTimestamp
     LocalDateTime createdAt;
+
+    String role;
 }

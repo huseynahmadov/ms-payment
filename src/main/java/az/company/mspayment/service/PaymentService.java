@@ -34,16 +34,18 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
 
     public void savePayment(PaymentRequest request) {
-      log.info("savePayment.started");
-      countryClient.getAllAvailableCountries(request.getCurrency())
-              .stream()
-              .filter(country -> country.getRemainingLimit().compareTo(request.getAmount()) > 0)
-                      .findFirst()
-                      .orElseThrow(() -> new NotFoundException(String.format(COUNTRY_NOT_FOUND_MESSAGE, request.getAmount(),
-                      request.getCurrency()), COUNTRY_NOT_FOUND_CODE));
+        log.info("savePayment.started");
+        countryClient.getAllAvailableCountries(request.getCurrency())
+                .stream()
+                .filter(country -> country.getRemainingLimit().compareTo(request.getAmount()) > 0)
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException(String.format(COUNTRY_NOT_FOUND_MESSAGE,
+                        request.getAmount(),
+                        request.getCurrency()),
+                        COUNTRY_NOT_FOUND_CODE));
 
-      paymentRepository.save(mapRequestToEntity(request));
-      log.info("savePayment.success");
+        paymentRepository.save(mapRequestToEntity(request));
+        log.info("savePayment.success");
     }
 
     public PageablePaymentResponse getAllPayments(int page, int count, PaymentCriteria paymentCriteria) {
@@ -51,10 +53,10 @@ public class PaymentService {
 
         var pageable = PageRequest.of(page, count, Sort.by(DESC, "id"));
 
-        var pageablePayments =  paymentRepository.findAll(
+        var pageablePayments = paymentRepository.findAll(
                 new PaymentSpecification(paymentCriteria), pageable);
 
-        var payments= pageablePayments.getContent()
+        var payments = pageablePayments.getContent()
                 .stream()
                 .map(PaymentMapper::mapEntityToResponse).collect(Collectors.toList());
 
@@ -71,7 +73,7 @@ public class PaymentService {
     public PaymentResponse getPaymentById(Long id) {
         log.info("getPayment.start id: {}", id);
         Payment payment = fetchPaymentIfExist(id);
-        log.info("getPayment.success id:{}",id);
+        log.info("getPayment.success id:{}", id);
         return mapEntityToResponse(payment);
     }
 
